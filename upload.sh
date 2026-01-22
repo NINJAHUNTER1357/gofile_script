@@ -109,7 +109,7 @@ MD5SUM=$(md5sum "$ROM_ZIP" | awk '{print $1}')
 sep
 log "Sending Telegram message..."
 
-send_telegram "🟢 | <b>ROM compiled!!</b>
+send_telegram "📦 | <b>ROM compiled!!</b>
 
 • <b>ROM</b>: ${ROM_NAME}
 • <b>DEVICE</b>: ${DEVICE}
