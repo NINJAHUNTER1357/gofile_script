@@ -88,6 +88,9 @@ BOOT_IMG="$PRODUCT_DIR/boot.img"
 VENDOR_BOOT_IMG="$PRODUCT_DIR/vendor_boot.img"
 DTBO_IMG="$PRODUCT_DIR/dtbo.img"
 
+# ---------------- OTA JSON ----------------
+DEVICE_JSON="$PRODUCT_DIR/${DEVICE}.json"
+
 # ---------------- GoFile ----------------
 log "Fetching GoFile server..."
 SERVER=$(curl -s https://api.gofile.io/servers | jq -r '.data.servers[0].name')
@@ -106,8 +109,9 @@ TMP_DIR=$(mktemp -d)
 
 upload "$ROM_ZIP" > "$TMP_DIR/rom" &
 upload "$BOOT_IMG" > "$TMP_DIR/boot" &
-upload "$VENDOR_BOOT_IMG" > "$TMP_DIR/vendor_boot" &
 upload "$DTBO_IMG" > "$TMP_DIR/dtbo" &
+upload "$VENDOR_BOOT_IMG" > "$TMP_DIR/vendor_boot" &
+upload "$DEVICE_JSON" > "$TMP_DIR/json" &
 
 wait
 
@@ -115,6 +119,7 @@ ROM_LINK=$(cat "$TMP_DIR/rom")
 BOOT_LINK=$(cat "$TMP_DIR/boot")
 VENDOR_BOOT_LINK=$(cat "$TMP_DIR/vendor_boot")
 DTBO_LINK=$(cat "$TMP_DIR/dtbo")
+JSON_LINK=$(cat "$TMP_DIR/json")
 
 rm -rf "$TMP_DIR"
 
@@ -135,8 +140,9 @@ send_telegram "📦 | <b>ROM compiled!!</b>
 • <b>MD5SUM</b>: <code>${MD5SUM}</code>
 • <b>ROM</b>: $(fmt_link "$ROM_LINK")
 • <b>BOOT</b>: $(fmt_link "$BOOT_LINK")
-• <b>VENDOR_BOOT</b>: $(fmt_link "$VENDOR_BOOT_LINK")
 • <b>DTBO</b>: $(fmt_link "$DTBO_LINK")
+• <b>VENDOR_BOOT</b>: $(fmt_link "$VENDOR_BOOT_LINK")
+• <b>JSON</b>: $(fmt_link "$JSON_LINK")
 "
 
 sep
